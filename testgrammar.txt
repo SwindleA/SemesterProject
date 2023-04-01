@@ -1,0 +1,25 @@
+?start: statement_list
+
+statement_list: statement+
+
+?statement: assignment 
+            | if_statement
+            
+
+assignment: expression  "=" var
+
+var: "ן"
+
+if_statement: "אִם" expression   statement_list "סוף"
+
+
+?expression: var
+            | literal
+            | expression "<" expression -> gt
+
+literal: NUMBER
+
+%import common.CNAME -> NAME
+%import common.WS
+%import common.INT -> NUMBER 
+%ignore WS
