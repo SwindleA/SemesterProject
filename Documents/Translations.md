@@ -28,5 +28,5 @@ while - בעוד
 
 end - סוף 
 
-print("") - ("")הדפס 
-
+print('') - ('')הדפס 
+NOTE: typing this out causes parsing errors
