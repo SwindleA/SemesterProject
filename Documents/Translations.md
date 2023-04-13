@@ -23,7 +23,7 @@
 
 expression "<" expression -> gt - ן > 1  i.e. ן is greater than 1, NOTE: reads backwards
 
-do - עשה
+do - עשה:
 while - בעוד
 
 end - סוף 
