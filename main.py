@@ -1,5 +1,8 @@
 from lark import Lark
 
+
+# NOTE: some things do not appear to be right to left in the grammer but when displaying to the user, they are correctly right to left
+# The above note may be because of ignoring white space causes issues. 
 my_grammar = """
 ?start: statement_list
 
@@ -7,32 +10,47 @@ my_grammar = """
 
 ?statement: assignment 
             | if_statement
-            | while_statement
+            | do_while_statement
             | print_statement
             | expression
+            | user_defined_function
             
 
-assignment: expression  " = " var
+assignment: var   " = " expression
 
-alpha: "א" | "ב" | "ג" | "ך" | "ח" | "ו" | "ז" | "ה" | "ס"  | "י" "כ" | "ל" | "מ" | "נ" | "ם" | "ץ" | "פ"  | "ע" | "ק"  | "ר" | "ש"  | "ת"
+ALPHA: "ף"|"א" | "ב" | "ג" | "ך" | "ח" | "ו" | "ז" | "ה" | "ס"  | "י" "כ" | "ל" | "מ" | "נ" | "ם" | "ץ" | "פ"  | "ע" | "ק"  | "ר" | "ש"  | "ת" |"ד"
 
-var: alpha+
+var : ALPHA+
+function_name: var | var "_" var
+parameter: ALPHA*
+
+END: "סוף"
 
 
-output_statement: alpha+
+output_statement: ALPHA+
 
-if_statement: "אִם" expression   statement_list "סוף"
-while_statement: "עשה" statement_list  "בעוד" expression "סוף"
-print_statement: "('" output_statement "')הדפס"
+condition: comparison
+
+if_statement: "אם(" condition "):" statement_list END
+
+do_while_statement: "עשה:"statement_list "בעוד" condition END
+
+print_statement: "הדפס('" output_statement "')"
+
+
+user_defined_function:  "להגדיר" function_name "(" parameter "):" statement_list END
+
 
 ?expression: var
             | literal
-            | expression ">" expression -> gt
+            |comparison
+            | operation
+
+comparison: expression ">" expression -> gt
             | expression "<" expression -> lt
             | expression ">=" expression -> ge
             | expression "<=" expression -> le
             | expression "==" expression -> eq
-            | operation
 
 operation: literal operator literal
 
@@ -40,7 +58,7 @@ operator: "*"|"+"|"-"| "/"
 
 literal: NUMBER
 
-    %import common.CNAME -> NAME
+%import common.CNAME -> NAME
 %import common.WS
 %import common.INT -> NUMBER 
 %ignore WS

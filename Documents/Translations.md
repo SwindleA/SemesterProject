@@ -27,6 +27,10 @@ do - עשה
 while - בעוד
 
 end - סוף 
+      ;ux
 
 print('') - ('')הדפס 
 NOTE: typing this out causes parsing errors
+
+define user_function(): -להגדיר user_function():
+                         rhsdvk
