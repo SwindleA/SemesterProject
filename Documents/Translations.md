@@ -29,8 +29,19 @@ while - בעוד
 end - סוף 
       ;ux
 
-print('') - ('')הדפס 
-NOTE: typing this out causes parsing errors
+print('') - הדפס('')
+            xpsv
+
 
 define user_function(): -להגדיר user_function():
                          rhsdvk
+
+return - לחזור
+          ruzjk
+
+execute - לבצע
+          gmck
+
+
+
+
