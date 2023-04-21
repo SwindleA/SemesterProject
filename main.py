@@ -44,12 +44,13 @@ string: "'" ALPHA*  "'"
 condition: comparison
 
 block: statement_list end
+block_while: statement_list
 
 while_condition: condition end
 
 if_statement: "אם(" condition "):" block  
 
-do_while_statement: "עשה:"statement_list "בעוד" while_condition
+do_while_statement: "עשה:" block_while "בעוד" while_condition
 
 
 print_statement: "הדפס(" print_output ")" 
@@ -108,17 +109,14 @@ def translate(t, tab):
         return tab_str*tab + 'if ' + translate(condition,0) +":"+ '\n' + translate(block,tab) + '\n'
     
     elif t.data == 'do_while_statement':
-        statement_list, while_condition = t.children
-        return tab_str*tab+'while ' + translate(while_condition,0) + ": \n" + translate(statement_list,tab) + '\n'
+        block, while_condition = t.children
+        return tab_str*tab+'while ' + translate(while_condition,0) + ": \n" + translate(block,tab) + '\n'
     
     elif t.data ==  'print_statement':
         
-        if t.children[0].data == "var" or t.children[0].data == 'operation' or t.children[0].data == 'function':
-            
-            return tab_str*tab+'print(' + translate(t.children[0],0) + ')'
-        else:
-            
-            return tab_str*tab+ 'print("' + translate(t.children[0],0)+'")'
+       
+        return tab_str*tab+'print(' + translate(t.children[0],0) + ')'
+       
             
     elif t.data == 'user_defined_function':
         function_f, u_statement_list = t.children
@@ -170,6 +168,10 @@ def translate(t, tab):
         statement, end = t.children
         
         return tab_str*tab + translate(statement,tab+1) + '\n' + translate(end,tab)
+    elif t.data == 'block_while':
+        statement = t.children[0]
+        
+        return tab_str*tab + translate(statement,tab+1) + '\n' 
     
     elif t.data == 'condition':
 
@@ -192,7 +194,7 @@ def translate(t, tab):
             output+=child
 
         #NOTE: the return needs to be reverse because hebrew is right to left and the parse reads it left to right.
-        return output[::-1]
+        return "'"+ output[::-1] + "'"
 
     elif t.data == 'parameter':
 
@@ -263,11 +265,15 @@ program_if = """
 
 program_while = """
 
+ש = 0
+
 עשה:
 
-א = 9   
+הדפס(ש)
 
-בעוד ש > 9
+ש = ש + 1
+
+בעוד ש < 9
 
 סוף 
 
