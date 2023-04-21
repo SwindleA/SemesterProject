@@ -1,5 +1,5 @@
 from lark import Lark
-
+from lark import lexer
 
 # NOTE: some things do not appear to be right to left in the grammer but when displaying to the user, they are correctly right to left
 # The above note may be because of ignoring white space causes issues. 
@@ -14,19 +14,18 @@ my_grammar = """
             | print_statement
             | expression
             | user_defined_function
-            | return
             | execute
             
 
-assignment: var   " = " literal | var   " = " string 
+assignment: var   " = " literal | var   " = " string | var " = " operation
 
-ALPHA: "'"|"ף"|"א" | "ב" | "ג" | "ך" | "ח" | "ו" | "ז" | "ה" | "ס"  | "י" "כ" | "ל" | "מ" | "נ" | "ם" | "ץ" | "פ"  | "ע" | "ק"  | "ר" | "ש"  | "ת" |"ד" | "_" | "(" | ")" | "ז" | "צ" 
+ALPHA: "'"|"ף"|"א" | "ב" | "ג" | "ך" | "ח" | "ו" | "ז" | "ה" | "ס"  | "י" "כ" | "ל" | "מ" | "נ" | "ם" | "ץ" | "פ"  | "ע" | "ק"  | "ר" | "ש"  | "ת" |"ד" | "_" |  "ז" | "צ" 
 
 var : ALPHA+
 ?function_name: var
-parameter: (ALPHA)* | operation
+parameter: (ALPHA)* | operation | literal
 
-
+function: function_name "(" parameter ")"
 
 END: "סוף" 
 
@@ -35,31 +34,36 @@ end: END->end
 
 
 
-return: "לחזור" num_var | "לחזור" execute
+return: "לחזור" expression | "לחזור" execute
 
 
-?print_output: string | var | operation | NUMBER
+?print_output: string | var | operation | NUMBER | function
 
 string: "'" ALPHA*  "'"
 
 condition: comparison
+
 block: statement_list end
+block_while: statement_list
+
 while_condition: condition end
 
 if_statement: "אם(" condition "):" block  
 
-do_while_statement: "עשה:"statement_list "בעוד" while_condition
+do_while_statement: "עשה:" block_while "בעוד" while_condition
 
 
 print_statement: "הדפס(" print_output ")" 
 
-user_defined_function:  "להגדיר" function_name "(" parameter "):" statement_list end
+user_defined_function:  "להגדיר" function ":" block
 
-execute: "לבצע{" function_name "(" parameter ")}"
+execute: "לבצע{" var "}"  
 
-?expression: num_var
+?expression: var
+            | literal
             |comparison
             | operation
+            | return
 
 comparison: expression ">" expression -> gt
             | expression "<" expression -> lt
@@ -67,7 +71,7 @@ comparison: expression ">" expression -> gt
             | expression "<=" expression -> le
             | expression "==" expression -> eq
 
-operation: num_var operator num_var
+operation: expression operator expression | function operator function
 
 operator: "*" -> mult
         |"+" -> add
@@ -76,7 +80,7 @@ operator: "*" -> mult
 
 literal: NUMBER
 
-num_var: literal | var
+
 
 
 %import common.CNAME -> NAME
@@ -85,41 +89,45 @@ num_var: literal | var
 %ignore WS
 """
 
+tab_str = "\t"
+
 #translating into python
-def translate(t):
+def translate(t, tab):
     
     if t.data == 'statement_list':
-        return '\n'.join(map(translate, t.children))
+        # return '\n'.join(map(translate , t.children ))
+        return '\n'.join([translate(x,tab)for x in t.children])
     
     elif t.data == 'assignment':
         lhs, rhs = t.children
-        return translate(lhs) + ' = ' +translate(rhs)
+        return tab_str*tab+ translate(lhs,tab) + ' = ' +translate(rhs,tab)
+        #return tab_str*tab +translate(lhs,tab) +"=" +''.join([translate(x,tab)for x in t.children[1:]])
     
     elif t.data == 'if_statement':
+       
         condition, block = t.children
-        return 'if ' + translate(condition) +":"+ '\n \t' + translate(block) + '\n'
+        return tab_str*tab + 'if ' + translate(condition,0) +":"+ '\n' + translate(block,tab) + '\n'
     
     elif t.data == 'do_while_statement':
-        statement_list, while_condition = t.children
-        return 'while ' + translate(while_condition) + ": \n \t" + translate(statement_list) + '\n'
+        block, while_condition = t.children
+        return tab_str*tab+'while ' + translate(while_condition,0) + ": \n" + translate(block,tab) + '\n'
     
     elif t.data ==  'print_statement':
-        if t.children[0].data == "var" or t.children[0].data == 'operation':
-            
-            return 'print(' + translate(t.children[0]) + ')'
-        else:
-            
-            return 'print("' + translate(t.children[0])+'")'
+        
+       
+        return tab_str*tab+'print(' + translate(t.children[0],0) + ')'
+       
             
     elif t.data == 'user_defined_function':
-        function_name, parameter, u_statement_list, end = t.children
+        function_f, u_statement_list = t.children
 
-        return "def " + translate(function_name) + " ("+translate(parameter)+"):\n \t"+ translate(u_statement_list)
+        return tab_str*tab + "def " + translate(function_f,0) +":\n"+ translate(u_statement_list,tab)
 
     elif t.data == 'operation':
+       
         lhs, operator, rhs = t.children
         
-        return translate(lhs) + translate(operator) + translate(rhs)
+        return tab_str*tab + translate(lhs,0) + translate(operator,0) + translate(rhs,0)
 
     elif t.data =='var':
         output =""
@@ -137,35 +145,40 @@ def translate(t):
 
     elif t.data == 'gt':
         lhs, rhs = t.children
-        return translate(lhs) +' > ' + translate(rhs)
+        return tab_str*tab + translate(lhs,0) +' > ' + translate(rhs,0)
     
     elif t.data == 'lt':
         lhs, rhs = t.children
-        return translate(lhs) +' < ' + translate(rhs)
+        return tab_str*tab + translate(lhs,0) +' < ' + translate(rhs,0)
     
     elif t.data == 'ge':
         lhs, rhs = t.children
-        return translate(lhs) +' >= ' + translate(rhs)
+        return tab_str*tab + translate(lhs,0) +' >= ' + translate(rhs,0)
     
     elif t.data == 'le':
         lhs, rhs = t.children
-        return translate(lhs) +' <= ' + translate(rhs)
+        return tab_str*tab + translate(lhs,0) +' <= ' + translate(rhs,0)
     
     elif t.data == 'eq':
         lhs, rhs = t.children
-        return translate(lhs) +' == ' + translate(rhs)
+        
+        return tab_str*tab + translate(lhs,0) +' == ' + translate(rhs,0)
 
     elif t.data == 'block':
         statement, end = t.children
         
-        return translate(statement) + '\n' + translate(end)
+        return tab_str*tab + translate(statement,tab+1) + '\n' + translate(end,tab)
+    elif t.data == 'block_while':
+        statement = t.children[0]
+        
+        return tab_str*tab + translate(statement,tab+1) + '\n' 
     
     elif t.data == 'condition':
 
-        return translate(t.children[0])
+        return translate(t.children[0],0)
     
     elif t.data == 'while_condition':
-        return translate(t.children[0])
+        return translate(t.children[0],0)
     
     elif t.data == 'output_statement':
         output =""
@@ -181,17 +194,21 @@ def translate(t):
             output+=child
 
         #NOTE: the return needs to be reverse because hebrew is right to left and the parse reads it left to right.
-        return output[::-1]
+        return "'"+ output[::-1] + "'"
 
     elif t.data == 'parameter':
 
-       
-
-        if t.children[0] != "operation":
+        
+        if isinstance(t.children[0],lexer.Token):
             
-            return t.children[0]
-       
-        return translate(t.children[0]) 
+            return "("+ t.children[0]+")"
+        
+        
+        return  "("+ translate(t.children[0],0) + ")"
+        
+    elif t.data == 'function':
+        function_name, parameter = t.children
+        return translate(function_name,0) + translate(parameter,0)
 
         
     
@@ -215,16 +232,19 @@ def translate(t):
     
     
     elif t.data == 'return':
-       
-        return "return " + translate(t.children[0])
+        
+        return tab_str*tab + "return " + translate(t.children[0],0)
 
     elif t.data == 'execute':
         
-        function_n , parameter = t.children
-        return translate(function_n) + translate(parameter)
+        # function_n , parameter = t.children
+        
+        # return tab_str*tab + translate(function_n,0) + "(" + translate(parameter,0)+")"
+        return translate(t.children[0],0)
+    
     elif t.data =='num_var':
 
-        return translate(t.children[0])
+        return translate(t.children[0],0)
 
     else:
         raise SyntaxError("bad tree")
@@ -245,11 +265,15 @@ program_if = """
 
 program_while = """
 
+ש = 0
+
 עשה:
 
-א = 9   
+הדפס(ש)
 
-בעוד ש > 9
+ש = ש + 1
+
+בעוד ש < 9
 
 סוף 
 
@@ -296,7 +320,11 @@ program_fibonacci = """
 סוף
 
 
-לחזור לבצע{ פ(מ-1)} 
+ף = פ(מ -1 )+פ( מ - 2 )
+
+לחזור לבצע{ף}
+
+
 
 
 
@@ -306,11 +334,11 @@ program_fibonacci = """
 סוף
 
 
-
-
+הדפס(פ(9))
 
 
 """
+
 
 
 
@@ -382,8 +410,10 @@ parse_tree = parser.parse(program_fibonacci)
 
 print(parse_tree.pretty())
 
-translation = translate(parse_tree)
+translation = translate(parse_tree,0)
 print(translation)
+
+
 
 exec(translation)
 
