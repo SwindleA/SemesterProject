@@ -14,11 +14,10 @@ my_grammar = """
             | print_statement
             | expression
             | user_defined_function
-            | return
             | execute
             
 
-assignment: var   " = " literal | var   " = " string | var "=" operation
+assignment: var   " = " literal | var   " = " string | var " = " operation
 
 ALPHA: "'"|"ף"|"א" | "ב" | "ג" | "ך" | "ח" | "ו" | "ז" | "ה" | "ס"  | "י" "כ" | "ל" | "מ" | "נ" | "ם" | "ץ" | "פ"  | "ע" | "ק"  | "ר" | "ש"  | "ת" |"ד" | "_" | "(" | ")" | "ז" | "צ" 
 
@@ -35,7 +34,7 @@ end: END->end
 
 
 
-return: "לחזור" num_var | "לחזור" execute
+return: "לחזור" expression | "לחזור" execute
 
 
 ?print_output: string | var | operation | NUMBER | function
@@ -59,9 +58,11 @@ user_defined_function:  "להגדיר" function ":" block
 
 execute: "לבצע{" var "}"  
 
-?expression: num_var
+?expression: var
+            | literal
             |comparison
             | operation
+            | return
 
 comparison: expression ">" expression -> gt
             | expression "<" expression -> lt
@@ -69,7 +70,7 @@ comparison: expression ">" expression -> gt
             | expression "<=" expression -> le
             | expression "==" expression -> eq
 
-operation: num_var operator num_var | function operator function
+operation: expression operator expression | function operator function
 
 operator: "*" -> mult
         |"+" -> add
@@ -78,7 +79,7 @@ operator: "*" -> mult
 
 literal: NUMBER
 
-num_var: literal | var
+
 
 
 %import common.CNAME -> NAME
@@ -112,12 +113,12 @@ def translate(t, tab):
     
     elif t.data ==  'print_statement':
         print("print: ", t.children[0])
-        if t.children[0].data == "var" or t.children[0].data == 'operation' or t.children[0] == 'function':
+        #if t.children[0].data == "var" or t.children[0].data == 'operation' or t.children[0] == 'function':
             
-            return tab_str*tab+'print(' + translate(t.children[0],0) + ')'
-        else:
+        return tab_str*tab+'print(' + translate(t.children[0],0) + ')'
+        # else:
             
-            return tab_str*tab+ 'print("' + translate(t.children[0],0)+'")'
+        #     return tab_str*tab+ 'print("' + translate(t.children[0],0)+'")'
             
     elif t.data == 'user_defined_function':
         function_f, u_statement_list = t.children
@@ -314,7 +315,9 @@ program_fibonacci = """
 
 
 ף = פ(מ -1 )+פ( מ - 2 )
-לחזור לבצע{ף} 
+
+לחזור לבצע{ף}
+
 
 
 
