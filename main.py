@@ -19,7 +19,7 @@ my_grammar = """
 
 assignment: var   " = " literal | var   " = " string | var " = " operation
 
-ALPHA: "'"|"ף"|"א" | "ב" | "ג" | "ך" | "ח" | "ו" | "ז" | "ה" | "ס"  | "י" "כ" | "ל" | "מ" | "נ" | "ם" | "ץ" | "פ"  | "ע" | "ק"  | "ר" | "ש"  | "ת" |"ד" | "_" | "(" | ")" | "ז" | "צ" 
+ALPHA: "'"|"ף"|"א" | "ב" | "ג" | "ך" | "ח" | "ו" | "ז" | "ה" | "ס"  | "י" "כ" | "ל" | "מ" | "נ" | "ם" | "ץ" | "פ"  | "ע" | "ק"  | "ר" | "ש"  | "ת" |"ד" | "_" |  "ז" | "צ" 
 
 var : ALPHA+
 ?function_name: var
@@ -112,13 +112,13 @@ def translate(t, tab):
         return tab_str*tab+'while ' + translate(while_condition,0) + ": \n" + translate(statement_list,tab) + '\n'
     
     elif t.data ==  'print_statement':
-        print("print: ", t.children[0])
-        #if t.children[0].data == "var" or t.children[0].data == 'operation' or t.children[0] == 'function':
+        
+        if t.children[0].data == "var" or t.children[0].data == 'operation' or t.children[0].data == 'function':
             
-        return tab_str*tab+'print(' + translate(t.children[0],0) + ')'
-        # else:
+            return tab_str*tab+'print(' + translate(t.children[0],0) + ')'
+        else:
             
-        #     return tab_str*tab+ 'print("' + translate(t.children[0],0)+'")'
+            return tab_str*tab+ 'print("' + translate(t.children[0],0)+'")'
             
     elif t.data == 'user_defined_function':
         function_f, u_statement_list = t.children
