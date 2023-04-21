@@ -403,17 +403,25 @@ program_variable_with_string = """
 
 """
 
+print("1. While loop that increments a counter.\n2. Fibonacci Sequence for 9. \n")
 
+program_num = input("Enter program number: ")
 
+match program_num:
 
-parse_tree = parser.parse(program_fibonacci)
+    case '1':
+        program = program_while
+    case '2':
+        program  = program_fibonacci
 
-print(parse_tree.pretty())
+parse_tree = parser.parse(program)
+
+#print(parse_tree.pretty())
 
 translation = translate(parse_tree,0)
-print(translation)
 
 
+#print(translation)
 
 exec(translation)
 
