@@ -19,7 +19,7 @@ my_grammar = """
 
 assignment: var   " = " literal | var   " = " string | var " = " operation
 
-ALPHA: "'"|"ף"|"א" | "ב" | "ג" | "ך" | "ח" | "ו" | "ז" | "ה" | "ס"  | "י" "כ" | "ל" | "מ" | "נ" | "ם" | "ץ" | "פ"  | "ע" | "ק"  | "ר" | "ש"  | "ת" |"ד" | "_" |  "ז" | "צ" 
+ALPHA: "'"|"ף"|"א" | "ב" | "ג" | "ך" | "ח" | "ו" | "ז" | "ה" | "ס"  | "י" | "כ" | "ל" | "מ" | "נ" | "ם" | "ץ" | "פ"  | "ע" | "ק"  | "ר" | "ש"  | "ת" |"ד" | "_" |  "ז" | "צ" 
 
 var : ALPHA+
 ?function_name: var
@@ -403,9 +403,17 @@ program_variable_with_string = """
 
 """
 
+
+
 print("1. While loop that increments a counter.\n2. Fibonacci Sequence for 9. \n")
 
 program_num = input("Enter program number: ")
+
+print_HS = input("Print the HebrewScript? [y]es/[n]o")
+
+print_parse = input("Print parse tree?[y]es/[n]o")
+
+print_python = input("Print the python interpretation of the HebrewScript program? [y]es/[n]o")
 
 match program_num:
 
@@ -414,14 +422,21 @@ match program_num:
     case '2':
         program  = program_fibonacci
 
+
+if print_HS =='y':
+    print(program+'\n')
+
 parse_tree = parser.parse(program)
 
-#print(parse_tree.pretty())
+if print_parse == 'y':
+
+    print(parse_tree.pretty())
 
 translation = translate(parse_tree,0)
 
+if print_python == 'y':
 
-#print(translation)
+    print(translation)
 
 exec(translation)
 
