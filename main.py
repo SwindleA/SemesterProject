@@ -340,9 +340,6 @@ program_fibonacci = """
 """
 
 
-
-
-
 program_print_variable = """
 
 ש = 9
@@ -404,24 +401,100 @@ program_variable_with_string = """
 """
 
 
+#https://www.geeksforgeeks.org/lucas-numbers/
+program_lucas_number = """
 
-print("1. While loop that increments a counter.\n2. Fibonacci Sequence for 9. \n")
+להגדיר ש(מ):
+
+
+אם(מ==0):
+
+לחזור 2
+
+סוף
+
+
+אם(מ==1):
+
+לחזור 1
+
+סוף
+
+ף = ש(מ -1 ) + ש(מ -2)
+
+לחזור לבצע{ף}
+
+סוף
+
+
+
+הדפס(ש(9))
+
+
+"""
+
+program_string_concatination = """
+
+
+ל = 'פרה'
+
+ש = 'לשמזת'
+
+הדפס(ש+ל)
+
+
+"""
+
+
+program_string_multiplication = """
+
+
+ל = 'פרה'
+
+ש = ל * 10
+הדפס(ש)
+
+
+"""
+
+
+print("0. Exit \n1. While loop that increments a counter 0 to 8.\n2. Fibonacci Sequence for 9. \n3. Do basic math problems: \n\t 10 + 9 \n\t 10 * 9 \n\t 100 / 25 \n\t 100 - 25 \n4. Print the word דלג to the screen\n5. Find the Lucas Number for 9 \n6. Concatination of strings.\n7. String multiplication of a string to create a larger string.")
 
 program_num = input("Enter program number: ")
 
-print_HS = input("Print the HebrewScript? [y]es/[n]o")
 
-print_parse = input("Print parse tree?[y]es/[n]o")
-
-print_python = input("Print the python interpretation of the HebrewScript program? [y]es/[n]o")
 
 match program_num:
-
+    case '0':
+        exit()
     case '1':
         program = program_while
     case '2':
         program  = program_fibonacci
+    case '3':
+        program = program_basic_math
+    case '4':
+        program = program_variable_with_string
 
+    case '5':
+        program = program_lucas_number
+
+    case '6':
+        program = program_string_concatination
+
+    case '7':
+        program = program_string_multiplication
+
+    case _:
+        
+        print("Error occured")
+        exit()
+
+print_HS = input("\n\nPrint the HebrewScript? [y]es/[n]o: ")
+
+print_parse = input("Print parse tree?[y]es/[n]o: ")
+
+print_python = input("Print the python interpretation of the HebrewScript program? [y]es/[n]o: ")
 
 if print_HS =='y':
     print(program+'\n')
