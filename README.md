@@ -1,29 +1,29 @@
 # HebrewScript
 
 # Project Outline
-Semester Project for CSCI 3200, Programming Languages. Creating a new programming language, parsing it, translate it to python and compile/execute.
+Semester Project for CSCI 3200, Programming Languages. Create a new programming language, parse it, translate it to python and compile/execute.
 
 # About the language 
 
 HebrewScript is an odd combination of Python and Java. Instead of the Roman alphabet this language uses the Hebrew alphabet. 
 
 ## Writing in HebrewScript
-The language is read right to left, top to bottom. Typing the language follows all of the conventions of typing in Hebrew. The symbols like, brackets, parenthesis, etc... are typed using the reverse. For example, the open parenthesis is typed using the closed parenthesis button. It is best to familirize yourself with how Hebrew is tpyed before attempting to write programs. There are many instances that the line you are typing appears incorrect until you are finished typing the line. 
+The language is read right to left, top to bottom. Typing the language follows all the conventions of typing in Hebrew. The symbols like, brackets, parenthesis, etc... are typed using the reverse. For example, the open parenthesis is typed using the closed parenthesis button. It is best to familiarize yourself with how Hebrew is typed before attempting to write programs. There are many instances that the line you are typing appears incorrect until you are finished typing the line. 
 
 ## Code structure
-The best way to understand the language is to look at the translations outlined in the [Translations](#translations) section. Statement lines such as if, do, and user defined functions end with a colon(':'). <br> 
+The best way to understand the language is to look at the translations outlined in the [Translations](#translations) section. Statement lines such as if, do, and user defined functions end with a colon (':'). <br> 
 <br>
 
 block is the code executed within a function.
 ### Functions are structure as such:
 
-(paramter) function_type: <br> <br>
+(parameter) function_type: <br> <br>
 block <br> <br>
 end
 
 <br>
 
-### While statements are in a do-while foramt:
+### While statements are in a do-while format:
 <br>
    
 do: <br>
@@ -53,7 +53,7 @@ All translations were done using Google Translate. The Hebrew translation of a w
 
 
 
-"אם" - if
+if - "אם" 
 
 print("Hello World") - ('שלום עולם')הדפס  
 
@@ -63,7 +63,7 @@ while - בעוד
 end - סוף 
 
 
-define user_function_name(paramter): - להגדיר פ(מ):
+define user_function_name(parameter): - להגדיר פ(מ):
 
 
 return - לחזור
@@ -74,7 +74,7 @@ execute{thing to be executed} - {ש}לבצע
 
 
 ## Alphabet:
- Outlined below are all the characters accepted as part of HebrewScript's alphabet. It contains the Hebrew alphabet,minus some vowels, and a few characters. Different fonts can make characters look drastically different.
+ Outlined below are all the characters accepted as part of HebrewScript's alphabet. It contains the Hebrew alphabet, minus some vowels, and a few characters. Different fonts can make characters look drastically different.
 
  <br> Not in any particular order:
 
@@ -85,7 +85,7 @@ execute{thing to be executed} - {ש}לבצע
 
 Running the sample programs is as simple as: 
 1. Run the main.py file
-2. Select a progam to run using the corresponding number.
+2. Select a program to run using the corresponding number.
 3. Select whether or not the HebrewScript for the program will be printed to the screen.
 4. Select whether or not the parse tree is printed to the screen.
 5. Select whether or not the python translation of HebrewScript is printed to the screen. 
