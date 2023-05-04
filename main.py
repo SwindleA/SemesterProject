@@ -1,8 +1,8 @@
 from lark import Lark
 from lark import lexer
 
-# NOTE: some things do not appear to be right to left in the grammer but when displaying to the user, they are correctly right to left
-# The above note may be because of ignoring white space causes issues. 
+# NOTE: In the grammer, some things do not appear to be right to left but when displaying to the user, they are correctly right to left
+
 my_grammar = """
 ?start: statement_list
 

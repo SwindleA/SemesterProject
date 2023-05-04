@@ -58,6 +58,7 @@ if - "אם"
 print("Hello World") - ('שלום עולם')הדפס  
 
 do - עשה:
+
 while - בעוד
 
 end - סוף 
@@ -89,3 +90,5 @@ Running the sample programs is as simple as:
 3. Select whether or not the HebrewScript for the program will be printed to the screen.
 4. Select whether or not the parse tree is printed to the screen.
 5. Select whether or not the python translation of HebrewScript is printed to the screen. 
+
+NOTE: If an error occurs, simply rerun the program and it should work the second or third time. The errors only occur with the Fibonacci Sequence program. This may be due to inconsistancies with how Lark interprets the Hebrew letters. 
