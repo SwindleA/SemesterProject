@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 from lark import Lark
 from lark import lexer
 
@@ -457,8 +459,9 @@ program_string_multiplication = """
 
 """
 
+first = "0. Exit \n1. While loop that increments a counter 0 to 8.\n2. Fibonacci Sequence for 9. \n3. Do basic math problems: \n\t 10 + 9 \n\t 10 * 9 \n\t 100 / 25 \n\t 100 - 25 \n4. Print the word דלג to the screen\n5. Find the Lucas Number for 9 \n6. Concatination of strings.\n7. String multiplication of a string to create a larger string."
 
-print("0. Exit \n1. While loop that increments a counter 0 to 8.\n2. Fibonacci Sequence for 9. \n3. Do basic math problems: \n\t 10 + 9 \n\t 10 * 9 \n\t 100 / 25 \n\t 100 - 25 \n4. Print the word דלג to the screen\n5. Find the Lucas Number for 9 \n6. Concatination of strings.\n7. String multiplication of a string to create a larger string.")
+print(first)
 
 program_num = input("Enter program number: ")
 
@@ -513,6 +516,6 @@ if print_python == 'y':
 
 exec(translation)
 
-
+exit = input("enter 0 to exit: ")
 
 
