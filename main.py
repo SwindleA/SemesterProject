@@ -459,9 +459,13 @@ program_string_multiplication = """
 
 """
 
-first = "0. Exit \n1. While loop that increments a counter 0 to 8.\n2. Fibonacci Sequence for 9. \n3. Do basic math problems: \n\t 10 + 9 \n\t 10 * 9 \n\t 100 / 25 \n\t 100 - 25 \n4. Print the word דלג to the screen\n5. Find the Lucas Number for 9 \n6. Concatination of strings.\n7. String multiplication of a string to create a larger string."
+#removed programs: \n4. Print the word דלג to the screen
+#                   \n6. Concatination of strings.
+#                   \n7. String multiplication of a string to create a larger string
 
-print(first)
+menu = "0. Exit \n1. While loop that increments a counter 0 to 8.\n2. Fibonacci Sequence for 9. \n3. Do basic math problems: \n\t 10 + 9 \n\t 10 * 9 \n\t 100 / 25 \n\t 100 - 25 \n5. Find the Lucas Number for 9."
+
+print(menu)
 
 program_num = input("Enter program number: ")
 
@@ -493,29 +497,29 @@ match program_num:
         print("Error occured")
         exit()
 
-print_HS = input("\n\nPrint the HebrewScript? [y]es/[n]o: ")
 
-print_parse = input("Print parse tree?[y]es/[n]o: ")
 
-print_python = input("Print the python interpretation of the HebrewScript program? [y]es/[n]o: ")
+f = open("Output\program.txt","w",-1,"utf-8")
+f.write(program)
+f.close()
 
-if print_HS =='y':
-    print(program+'\n')
 
 parse_tree = parser.parse(program)
 
-if print_parse == 'y':
+f = open("Output\parse_tree.txt","w",-1,"utf-8")
+f.write(parse_tree.pretty())
+f.close()
 
-    print(parse_tree.pretty())
 
 translation = translate(parse_tree,0)
 
-if print_python == 'y':
+f = open("Output\python.txt","w",-1,"utf-8")
+f.write(translation)
+f.close()
 
-    print(translation)
+
 
 exec(translation)
 
-exit = input("enter 0 to exit: ")
 
 

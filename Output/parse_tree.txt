@@ -1,0 +1,52 @@
+statement_list
+  user_defined_function
+    function
+      var	ש
+      parameter	מ
+    block
+      statement_list
+        if_statement
+          condition
+            eq
+              var	מ
+              literal	0
+          block
+            return
+              literal	2
+            end	סוף
+        if_statement
+          condition
+            eq
+              var	מ
+              literal	1
+          block
+            return
+              literal	1
+            end	סוף
+        assignment
+          var	ף
+          operation
+            function
+              var	ש
+              parameter
+                operation
+                  var	מ
+                  sub
+                  literal	1
+            add
+            function
+              var	ש
+              parameter
+                operation
+                  var	מ
+                  sub
+                  literal	2
+        return
+          execute
+            var	ף
+      end	סוף
+  print_statement
+    function
+      var	ש
+      parameter
+        literal	9

@@ -1,0 +1,16 @@
+def ש(מ):
+	if מ == 0:
+			return 2
+
+
+
+	if מ == 1:
+			return 1
+
+
+
+	ף = 	ש(מ-1)+ש(מ-2)
+	return ף
+
+
+print(ש(9))
